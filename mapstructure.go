@@ -673,6 +673,9 @@ func (d *Decoder) decodeMapFromStruct(name string, dataVal reflect.Value, val re
 		// Next get the actual value of this field and verify it is assignable
 		// to the map value.
 		v := dataVal.Field(i)
+		if v.Kind() == reflect.Ptr {
+			v = v.Elem()
+		}
 		if !v.Type().AssignableTo(valMap.Type().Elem()) {
 			return fmt.Errorf("cannot assign type '%s' to map value field of type '%s'", v.Type(), valMap.Type().Elem())
 		}
